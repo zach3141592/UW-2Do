@@ -1,5 +1,7 @@
 # UW Due Date 
 
+app to help waterloo students see what work they have to do in one place. pls star our repo :)
+
 ## Quick Start
 
 ### Prerequisites
@@ -44,4 +46,4 @@ npm run dev
 
 The app will open automatically in your browser at `http://localhost:3000`.
 
-Built with for University of Waterloo students to stay organized and succeed academically!
+Built for University of Waterloo students by Zachary Yu, Aaron Wang, and Calvin Lee.
