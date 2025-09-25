@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UW Due Date - Academic Task Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav-content">
+                <div class="nav-brand">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span class="brand-text">UW Due Date</span>
+                </div>
+                <div class="nav-links">
+                    <a href="#home" class="nav-link active">Home</a>
+                    <a href="#courses" class="nav-link">Courses</a>
+                    <a href="#about" class="nav-link">About</a>
+                </div>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <!-- Home Section -->
+            <section id="home" class="section home-section">
+                <div class="hero-layout">
+                    <div class="hero-content">
+                        <div class="hero-text">
+                            <h1>Stay on Top of Your Academic Deadlines</h1>
+                            <p>Upload your course syllabus and let AI identify the most urgent assignments and deadlines. Built specifically for University of Waterloo students.</p>
+                            <div class="cta-buttons">
+                                <button class="primary-btn" onclick="document.querySelector('.upload-section').scrollIntoView({ behavior: 'smooth' })">
+                                    <i class="fas fa-upload"></i>
+                                    Upload Syllabus
+                                </button>
+                                <a href="https://github.com/zach3141592/UW-DueDate" target="_blank" class="star-btn">
+                                    <i class="fab fa-github"></i>
+                                    Star our repo
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="popular-courses">
+                        <h3>Most Popular Courses</h3>
+                        <div class="courses-grid">
+                            <div class="course-item">
+                                <div class="course-code">COMMST 223</div>
+                                <div class="course-name">Public Speaking</div>
+                            </div>
+                            <div class="course-item">
+                                <div class="course-code">CS 135</div>
+                                <div class="course-name">Designing Functional Programs</div>
+                            </div>
+                            <div class="course-item">
+                                <div class="course-code">MATH 135</div>
+                                <div class="course-name">Algebra for Honours Mathematics</div>
+                            </div>
+                            <div class="course-item">
+                                <div class="course-code">MATH 137</div>
+                                <div class="course-name">Calculus 1 for Honours Mathematics</div>
+                            </div>
+                        </div>
+                        <div class="courses-note">
+                            <i class="fas fa-info-circle"></i>
+                            Upload any UW course syllabus to get started
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="upload-section">
+                    <h2>Upload Your Syllabus</h2>
+                    <div class="upload-card">
+                        <div class="upload-area" id="uploadArea">
+                            <div class="upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <h3>Upload Course Syllabus</h3>
+                            <p>Drag and drop your syllabus here, or click to browse</p>
+                            <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.txt" hidden>
+                            <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                                Choose File
+                            </button>
+                        </div>
+                        <div class="file-info" id="fileInfo" style="display: none;">
+                            <div class="file-details">
+                                <i class="fas fa-file-alt"></i>
+                                <span class="file-name" id="fileName"></span>
+                                <button class="remove-file" id="removeFile">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <button class="analyze-btn" id="analyzeBtn">
+                                <i class="fas fa-search"></i>
+                                Analyze Syllabus
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading Section -->
+                <div class="loading-section" id="loadingSection" style="display: none;">
+                    <div class="loading-card">
+                        <div class="loading-spinner"></div>
+                        <h3>Analyzing your syllabus...</h3>
+                        <p>Using AI to extract due dates and assignments</p>
+                    </div>
+                </div>
+
+                <!-- Results Section -->
+                <div class="results-section" id="resultsSection" style="display: none;">
+                    <div class="results-header">
+                        <h2>
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Urgent Tasks (Next 7 Days)
+                        </h2>
+                        <div class="current-date">
+                            Today: <span id="currentDate"></span>
+                        </div>
+                    </div>
+
+                    <div class="tasks-container" id="tasksContainer">
+                        <!-- Tasks will be populated here -->
+                    </div>
+
+                    <div class="all-tasks-section">
+                        <h3>
+                            <i class="fas fa-list"></i>
+                            All Upcoming Tasks
+                        </h3>
+                        <div class="all-tasks-container" id="allTasksContainer">
+                            <!-- All tasks will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Error Section -->
+                <div class="error-section" id="errorSection" style="display: none;">
+                    <div class="error-card">
+                        <div class="error-icon">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                        <h3>Something went wrong</h3>
+                        <p id="errorMessage">Please try again or upload a different file.</p>
+                        <button class="retry-btn" onclick="resetApp()">
+                            Try Again
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Courses Section -->
+            <section id="courses" class="section courses-section">
+                <div class="section-header">
+                    <h2>Course Management</h2>
+                    <p>Organize and track assignments across all your courses</p>
+                </div>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <h3>Multiple Syllabi</h3>
+                        <p>Upload and manage syllabi from multiple courses in one place</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h3>Unified Calendar</h3>
+                        <p>See all your assignments and deadlines in a single calendar view</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <h3>Smart Reminders</h3>
+                        <p>Get notified about upcoming deadlines before they sneak up on you</p>
+                    </div>
+                </div>
+                <div class="coming-soon">
+                    <p><i class="fas fa-clock"></i> These features are coming soon! Start by uploading a syllabus above.</p>
+                </div>
+            </section>
+
+            <!-- About Section -->
+            <section id="about" class="section about-section">
+                <div class="section-header">
+                    <h2>About UW Due Date</h2>
+                    <p>Helping University of Waterloo students stay organized and succeed academically</p>
+                </div>
+                <div class="about-content">
+                    <div class="about-text">
+                        <h3>Our Mission</h3>
+                        <p>We understand how overwhelming university can be with multiple courses, assignments, and deadlines. UW Due Date was created to help University of Waterloo students take control of their academic schedule by automatically extracting and organizing important dates from course syllabi.</p>
+                        
+                        <h3>How It Works</h3>
+                        <p>Simply upload your course syllabus and our AI-powered system will analyze the document to identify assignments, exams, and their due dates. We'll highlight the most urgent tasks and help you prioritize your work effectively.</p>
+                        
+                        <h3>Built for Students</h3>
+                        <p>This tool was designed specifically with University of Waterloo students in mind, understanding the unique challenges of managing course loads and deadlines in a fast-paced academic environment.</p>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number">AI</div>
+                            <div class="stat-label">Powered Analysis</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">7</div>
+                            <div class="stat-label">Day Urgency Window</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">∞</div>
+                            <div class="stat-label">Syllabi Supported</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2025 UW Due Date. Built by 
+                <a href="https://www.linkedin.com/in/zacharyyu/" target="_blank" class="author-link">Zachary Yu</a>, 
+                <a href="https://www.linkedin.com/in/aaron-wang-5b0a6a298/" target="_blank" class="author-link">Aaron Wang</a>, and 
+                <a href="https://www.linkedin.com/in/calvinlee33/" target="_blank" class="author-link">Calvin Lee</a> 
+                for University of Waterloo students ❤️
+            </p>
+        </footer>
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
