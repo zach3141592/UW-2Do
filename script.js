@@ -138,7 +138,7 @@ function handleFileSelect(e) {
 
     // Validate file type
     if (!config.ALLOWED_FILE_TYPES.includes(file.type)) {
-        showError('Please upload a PDF, Word document, or text file.');
+        showError('Please upload a PDF, PNG, JPG, DOCX, or HTML file.');
         return;
     }
 
