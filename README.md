@@ -1,4 +1,4 @@
-# UW Due Date 
+# UW 2Do
 
 app to help waterloo students see what work they have to do in one place. pls star our repo :)
 
