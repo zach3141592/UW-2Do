@@ -1,42 +1,250 @@
-// Import configuration
+// Import configuration and course data
 import { config } from './config.js';
+import { courseData } from './courseData.js';
 
 // DOM Elements
-const uploadArea = document.getElementById('uploadArea');
-const fileInput = document.getElementById('fileInput');
-const fileInfo = document.getElementById('fileInfo');
-const fileName = document.getElementById('fileName');
-const removeFile = document.getElementById('removeFile');
-const analyzeBtn = document.getElementById('analyzeBtn');
-const loadingSection = document.getElementById('loadingSection');
-const resultsSection = document.getElementById('resultsSection');
-const errorSection = document.getElementById('errorSection');
-const errorMessage = document.getElementById('errorMessage');
-const tasksContainer = document.getElementById('tasksContainer');
-const allTasksContainer = document.getElementById('allTasksContainer');
-const currentDate = document.getElementById('currentDate');
-
-// Global variables
-let selectedFile = null;
+const openChatBtn = document.getElementById('openChatBtn');
+const closeChatBtn = document.getElementById('closeChatBtn');
+const chatbot = document.getElementById('chatbot');
+const chatMessages = document.getElementById('chatMessages');
+const chatInput = document.getElementById('chatInput');
+const sendBtn = document.getElementById('sendBtn');
 
 // Initialize the app
 document.addEventListener('DOMContentLoaded', function() {
-    initializeApp();
     setupNavigation();
+    setupChatbot();
 });
 
-function initializeApp() {
-    // Set current date
-    const today = new Date();
-    currentDate.textContent = today.toLocaleDateString('en-US', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
+function setupChatbot() {
+    // Event listeners for chatbot
+    openChatBtn.addEventListener('click', openChat);
+    closeChatBtn.addEventListener('click', closeChat);
+    sendBtn.addEventListener('click', sendMessage);
+    chatInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
     });
 
-    // Set up event listeners
-    setupEventListeners();
+    // Close chatbot when clicking outside
+    chatbot.addEventListener('click', function(e) {
+        if (e.target === chatbot) {
+            closeChat();
+        }
+    });
+}
+
+function openChat() {
+    chatbot.style.display = 'flex';
+    chatInput.focus();
+}
+
+function closeChat() {
+    chatbot.style.display = 'none';
+}
+
+function sendMessage() {
+    const message = chatInput.value.trim();
+    if (!message) return;
+
+    // Add user message to chat
+    addMessage(message, 'user');
+    chatInput.value = '';
+
+    // Show typing indicator
+    showTypingIndicator();
+
+    // Process message with AI
+    setTimeout(() => {
+        hideTypingIndicator();
+        processUserMessage(message);
+    }, 1000);
+}
+
+function addMessage(content, type) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${type}-message`;
+    
+    const avatar = document.createElement('div');
+    avatar.className = 'message-avatar';
+    avatar.innerHTML = type === 'user' ? '<i class="fas fa-user"></i>' : '<img src="public/images/2DoLogo.png" alt="UW Due Date Logo" class="avatar-logo">';
+    
+    const messageContent = document.createElement('div');
+    messageContent.className = 'message-content';
+    
+    if (typeof content === 'string') {
+        messageContent.innerHTML = `<p>${content}</p>`;
+    } else {
+        messageContent.appendChild(content);
+    }
+    
+    messageDiv.appendChild(avatar);
+    messageDiv.appendChild(messageContent);
+    
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function showTypingIndicator() {
+    const typingDiv = document.createElement('div');
+    typingDiv.className = 'message bot-message typing-message';
+    typingDiv.innerHTML = `
+        <div class="message-avatar">
+            <img src="public/images/2DoLogo.png" alt="UW Due Date Logo" class="avatar-logo">
+        </div>
+        <div class="message-content">
+            <div class="typing-indicator">
+                <span>Thinking</span>
+                <div class="typing-dots">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            </div>
+        </div>
+    `;
+    chatMessages.appendChild(typingDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function hideTypingIndicator() {
+    const typingMessage = document.querySelector('.typing-message');
+    if (typingMessage) {
+        typingMessage.remove();
+    }
+}
+
+async function processUserMessage(message) {
+    try {
+        // Analyze the message to extract course and intent
+        const analysis = analyzeMessage(message);
+        
+        if (analysis.course && courseData[analysis.course]) {
+            const response = generateCourseResponse(analysis);
+            addMessage(response, 'bot');
+        } else {
+            // Use OpenAI for more complex queries
+            const aiResponse = await getAIResponse(message);
+            addMessage(aiResponse, 'bot');
+        }
+    } catch (error) {
+        console.error('Error processing message:', error);
+        addMessage('Sorry, I encountered an error. Please try again.', 'bot');
+    }
+}
+
+function analyzeMessage(message) {
+    const lowerMessage = message.toLowerCase();
+    
+    // Check for course codes
+    const courses = Object.keys(courseData);
+    const mentionedCourse = courses.find(course => 
+        lowerMessage.includes(course.toLowerCase()) || 
+        lowerMessage.includes(courseData[course].name.toLowerCase())
+    );
+    
+    // Determine intent
+    let intent = 'general';
+    if (lowerMessage.includes('due') || lowerMessage.includes('deadline')) {
+        intent = 'deadlines';
+    } else if (lowerMessage.includes('assignment') || lowerMessage.includes('homework')) {
+        intent = 'assignments';
+    } else if (lowerMessage.includes('exam') || lowerMessage.includes('test')) {
+        intent = 'exams';
+    } else if (lowerMessage.includes('week') || lowerMessage.includes('today') || lowerMessage.includes('tomorrow')) {
+        intent = 'urgent';
+    }
+    
+    return { course: mentionedCourse, intent };
+}
+
+function generateCourseResponse(analysis) {
+    const course = courseData[analysis.course];
+    const today = new Date();
+    const oneWeek = new Date();
+    oneWeek.setDate(today.getDate() + 7);
+    
+    let response = `Here's information about ${analysis.course} - ${course.name}:\n\n`;
+    
+    if (analysis.intent === 'urgent') {
+        const urgentTasks = course.assignments.filter(assignment => {
+            const dueDate = new Date(assignment.dueDate);
+            return dueDate >= today && dueDate <= oneWeek;
+        });
+        
+        if (urgentTasks.length > 0) {
+            response += "📅 **Upcoming this week:**\n";
+            urgentTasks.forEach(task => {
+                const dueDate = new Date(task.dueDate);
+                const days = Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
+                response += `• ${task.title} - Due ${dueDate.toLocaleDateString()} (${days} days)\n`;
+            });
+        } else {
+            response += "✅ No assignments due this week for this course!";
+        }
+    } else {
+        // Show next 3 upcoming assignments
+        const upcoming = course.assignments
+            .filter(assignment => new Date(assignment.dueDate) >= today)
+            .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))
+            .slice(0, 3);
+            
+        if (upcoming.length > 0) {
+            response += "📋 **Next assignments:**\n";
+            upcoming.forEach(task => {
+                const dueDate = new Date(task.dueDate);
+                response += `• ${task.title} - ${dueDate.toLocaleDateString()}\n`;
+            });
+        }
+    }
+    
+    return response;
+}
+
+async function getAIResponse(message) {
+    // Create a context-aware prompt
+    const prompt = `You are a helpful academic assistant for University of Waterloo students. 
+    
+Available courses and their data:
+${Object.entries(courseData).map(([code, course]) => 
+    `${code}: ${course.name} (${course.assignments.length} assignments)`
+).join('\n')}
+
+Current date: ${new Date().toLocaleDateString()}
+
+Student question: "${message}"
+
+Provide a helpful response about deadlines, assignments, or course information. If the question is about specific courses I have data for, use that information. Otherwise, provide general academic advice.`;
+
+    try {
+        const response = await fetch(config.OPENAI_API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${config.OPENAI_API_KEY}`
+            },
+            body: JSON.stringify({
+                model: 'gpt-4',
+                messages: [{
+                    role: 'user',
+                    content: prompt
+                }],
+                max_tokens: 500,
+                temperature: 0.7
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`OpenAI API error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data.choices[0].message.content;
+    } catch (error) {
+        console.error('AI response error:', error);
+        return 'I can help you with information about COMMST 223, CS 135, MATH 135, and MATH 137. Try asking about specific deadlines or assignments for these courses!';
+    }
 }
 
 function setupNavigation() {

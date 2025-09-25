@@ -50,9 +50,11 @@ body {
     color: #212529;
 }
 
-.nav-brand i {
-    font-size: 1.8rem;
-    color: #6c757d;
+.brand-logo {
+    height: 2rem;
+    width: 2rem;
+    object-fit: contain;
+    flex-shrink: 0;
 }
 
 .brand-text {
@@ -155,6 +157,33 @@ body {
     font-size: 1.1rem;
 }
 
+.add-course-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #28a745;
+    color: white;
+    text-decoration: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    border: 1px solid #1e7e34;
+}
+
+.add-course-btn:hover {
+    background: #218838;
+    color: white;
+    text-decoration: none;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+.add-course-btn i {
+    font-size: 1rem;
+}
+
 /* Message Section */
 .message-section {
     display: flex;
@@ -244,6 +273,7 @@ body {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
+    justify-content: flex-start;
 }
 
 .primary-btn {
@@ -339,23 +369,93 @@ body {
     color: #495057;
 }
 
-/* Upload Section */
-.upload-section {
+/* Course Data Section */
+.course-data-section {
     text-align: center;
     margin-bottom: 3rem;
 }
 
-.upload-section h2 {
+.course-data-section h2 {
     font-size: 2rem;
     font-weight: 600;
     color: #212529;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
-.upload-card {
-    width: 100%;
-    max-width: 600px;
+.course-data-section p {
+    color: #6c757d;
+    font-size: 1.1rem;
+    margin-bottom: 3rem;
+}
+
+.available-courses {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1000px;
     margin: 0 auto;
+}
+
+.course-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.course-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    border-color: #495057;
+}
+
+.course-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.course-header h3 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #212529;
+    margin: 0;
+}
+
+.course-badge {
+    background: #495057;
+    color: white;
+    padding: 0.25rem 0.8rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.course-card p {
+    color: #6c757d;
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.course-stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: #495057;
+}
+
+.course-stats span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.course-stats i {
+    color: #6c757d;
 }
 
 .upload-card {
@@ -654,6 +754,11 @@ body {
     background: #f8f9fa;
 }
 
+/* How To Section */
+.howto-section {
+    background: #ffffff;
+}
+
 .feature-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -702,9 +807,35 @@ body {
     margin: 0;
 }
 
-.coming-soon i {
-    margin-right: 0.5rem;
+.how-to-examples {
+    text-align: center;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.how-to-examples h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 1rem;
+}
+
+.how-to-examples ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.how-to-examples li {
+    background: #f8f9fa;
+    margin: 0.5rem 0;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
     color: #495057;
+    font-style: italic;
+    border-left: 3px solid #6c757d;
 }
 
 /* About Section */
@@ -850,6 +981,219 @@ body {
     border-bottom-color: #495057;
 }
 
+/* Chatbot Styles */
+.chatbot-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+}
+
+.chatbot-container {
+    background: #ffffff;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.chatbot-header {
+    background: #495057;
+    color: white;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chatbot-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.chatbot-logo {
+    height: 1.5rem;
+    width: 1.5rem;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+.close-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.chatbot-messages {
+    flex: 1;
+    padding: 1.5rem;
+    overflow-y: auto;
+    max-height: 400px;
+}
+
+.message {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.message-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.avatar-logo {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+.bot-message .message-avatar {
+    background: #495057;
+    color: white;
+}
+
+.user-message {
+    flex-direction: row-reverse;
+}
+
+.user-message .message-avatar {
+    background: #e9ecef;
+    color: #495057;
+}
+
+.message-content {
+    flex: 1;
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 12px;
+    border-bottom-left-radius: 4px;
+}
+
+.user-message .message-content {
+    background: #495057;
+    color: white;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 4px;
+}
+
+.message-content p {
+    margin: 0 0 0.5rem 0;
+    line-height: 1.5;
+}
+
+.message-content p:last-child {
+    margin-bottom: 0;
+}
+
+.message-content ul {
+    margin: 0.5rem 0 0 0;
+    padding-left: 1.2rem;
+}
+
+.message-content li {
+    margin-bottom: 0.25rem;
+    font-style: italic;
+    color: #6c757d;
+}
+
+.user-message .message-content li {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.chatbot-input {
+    display: flex;
+    padding: 1.5rem;
+    border-top: 1px solid #e9ecef;
+    gap: 1rem;
+}
+
+.chatbot-input input {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.chatbot-input input:focus {
+    border-color: #495057;
+}
+
+.chatbot-input button {
+    background: #495057;
+    color: white;
+    border: none;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.chatbot-input button:hover {
+    background: #343a40;
+}
+
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #6c757d;
+    font-style: italic;
+}
+
+.typing-dots {
+    display: flex;
+    gap: 2px;
+}
+
+.typing-dot {
+    width: 4px;
+    height: 4px;
+    background: #6c757d;
+    border-radius: 50%;
+    animation: typing 1.4s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(1) { animation-delay: -0.32s; }
+.typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes typing {
+    0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+    40% { transform: scale(1); opacity: 1; }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .container {
@@ -872,8 +1216,9 @@ body {
         gap: 0.6rem;
     }
     
-    .nav-brand i {
-        font-size: 1.5rem;
+    .brand-logo {
+        height: 1.5rem;
+        width: 1.5rem;
     }
     
     .brand-text {
@@ -1014,7 +1359,7 @@ body {
         gap: 0.8rem;
     }
     
-    .primary-btn, .star-btn {
+    .primary-btn, .star-btn, .add-course-btn {
         width: 100%;
         justify-content: center;
     }

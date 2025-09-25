@@ -7,18 +7,21 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="public/images/2DoLogo.png">
+    <link rel="shortcut icon" type="image/png" href="public/images/2DoLogo.png">
 </head>
 <body>
     <div class="container">
         <nav class="navbar">
             <div class="nav-content">
                 <div class="nav-brand">
-                    <i class="fas fa-graduation-cap"></i>
+                    <img src="public/images/2DoLogo.png" alt="UW Due Date Logo" class="brand-logo">
                     <span class="brand-text">UW Due Date</span>
                 </div>
                 <div class="nav-links">
                     <a href="#home" class="nav-link active">Home</a>
                     <a href="#courses" class="nav-link">Courses</a>
+                    <a href="#howto" class="nav-link">How To</a>
                     <a href="#about" class="nav-link">About</a>
                 </div>
             </div>
@@ -31,16 +34,20 @@
                     <div class="hero-content">
                         <div class="hero-text">
                             <h1>Stay on Top of Your Academic Deadlines</h1>
-                            <p>Upload your course syllabus and let AI identify the most urgent assignments and deadlines. Built specifically for University of Waterloo students.</p>
+                            <p>Ask our AI assistant about your course deadlines and assignments. Built specifically for University of Waterloo students with preloaded course data.</p>
                             <div class="cta-buttons">
-                                <button class="primary-btn" onclick="document.querySelector('.upload-section').scrollIntoView({ behavior: 'smooth' })">
-                                    <i class="fas fa-upload"></i>
-                                    Upload Syllabus
+                                <button class="primary-btn" id="openChatBtn">
+                                    <i class="fas fa-comments"></i>
+                                    Ask
                                 </button>
-                                <a href="https://github.com/zach3141592/UW-DueDate" target="_blank" class="star-btn">
-                                    <i class="fab fa-github"></i>
-                                    Star our repo
+                                <a href="https://forms.gle/7rC4YhJGexZMMgRR9" target="_blank" class="add-course-btn">
+                                    <i class="fas fa-plus"></i>
+                                    Add Course
                                 </a>
+                                    <a href="https://github.com/zach3141592/UW-2Do" target="_blank" class="star-btn">
+                                        <i class="fab fa-github"></i>
+                                        Star our repo
+                                    </a>
                             </div>
                         </div>
                     </div>
@@ -68,84 +75,57 @@
                     </div>
                 </div>
                 
-                <div class="upload-section">
-                    <h2>Upload Your Syllabus</h2>
-                    <div class="upload-card">
-                        <div class="upload-area" id="uploadArea">
-                            <div class="upload-icon">
-                                <i class="fas fa-cloud-upload-alt"></i>
+                <div class="course-data-section">
+                    <h2>Available Course Data</h2>
+                    <p>Ask our AI assistant about deadlines and assignments for these courses:</p>
+                    <div class="available-courses">
+                        <div class="course-card" data-course="COMMST223">
+                            <div class="course-header">
+                                <h3>COMMST 223</h3>
+                                <span class="course-badge">Spring 2025</span>
                             </div>
-                            <h3>Upload Course Syllabus</h3>
-                            <p>Drag and drop your syllabus here, or click to browse<br>
-                            <small>Supports PDF, PNG, JPG, DOCX, and HTML files</small></p>
-                            <input type="file" id="fileInput" accept=".pdf,.png,.jpg,.jpeg,.docx,.html" hidden>
-                            <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
-                                Choose File
-                            </button>
-                        </div>
-                        <div class="file-info" id="fileInfo" style="display: none;">
-                            <div class="file-details">
-                                <i class="fas fa-file-alt"></i>
-                                <span class="file-name" id="fileName"></span>
-                                <button class="remove-file" id="removeFile">
-                                    <i class="fas fa-times"></i>
-                                </button>
+                            <p>Public Speaking</p>
+                            <div class="course-stats">
+                                <span><i class="fas fa-calendar"></i> 8 Assignments</span>
+                                <span><i class="fas fa-clock"></i> Next: Feb 15</span>
                             </div>
-                            <button class="analyze-btn" id="analyzeBtn">
-                                <i class="fas fa-search"></i>
-                                Analyze Syllabus
-                            </button>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Loading Section -->
-                <div class="loading-section" id="loadingSection" style="display: none;">
-                    <div class="loading-card">
-                        <div class="loading-spinner"></div>
-                        <h3>Analyzing your syllabus...</h3>
-                        <p>Using AI to extract due dates and assignments</p>
-                    </div>
-                </div>
-
-                <!-- Results Section -->
-                <div class="results-section" id="resultsSection" style="display: none;">
-                    <div class="results-header">
-                        <h2>
-                            <i class="fas fa-exclamation-triangle"></i>
-                            Urgent Tasks (Next 7 Days)
-                        </h2>
-                        <div class="current-date">
-                            Today: <span id="currentDate"></span>
+                        
+                        <div class="course-card" data-course="CS135">
+                            <div class="course-header">
+                                <h3>CS 135</h3>
+                                <span class="course-badge">Spring 2025</span>
+                            </div>
+                            <p>Designing Functional Programs</p>
+                            <div class="course-stats">
+                                <span><i class="fas fa-calendar"></i> 12 Assignments</span>
+                                <span><i class="fas fa-clock"></i> Next: Feb 10</span>
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="tasks-container" id="tasksContainer">
-                        <!-- Tasks will be populated here -->
-                    </div>
-
-                    <div class="all-tasks-section">
-                        <h3>
-                            <i class="fas fa-list"></i>
-                            All Upcoming Tasks
-                        </h3>
-                        <div class="all-tasks-container" id="allTasksContainer">
-                            <!-- All tasks will be populated here -->
+                        
+                        <div class="course-card" data-course="MATH135">
+                            <div class="course-header">
+                                <h3>MATH 135</h3>
+                                <span class="course-badge">Spring 2025</span>
+                            </div>
+                            <p>Algebra for Honours Mathematics</p>
+                            <div class="course-stats">
+                                <span><i class="fas fa-calendar"></i> 10 Assignments</span>
+                                <span><i class="fas fa-clock"></i> Next: Feb 12</span>
+                            </div>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Error Section -->
-                <div class="error-section" id="errorSection" style="display: none;">
-                    <div class="error-card">
-                        <div class="error-icon">
-                            <i class="fas fa-exclamation-circle"></i>
+                        
+                        <div class="course-card" data-course="MATH137">
+                            <div class="course-header">
+                                <h3>MATH 137</h3>
+                                <span class="course-badge">Spring 2025</span>
+                            </div>
+                            <p>Calculus 1 for Honours Mathematics</p>
+                            <div class="course-stats">
+                                <span><i class="fas fa-calendar"></i> 9 Assignments</span>
+                                <span><i class="fas fa-clock"></i> Next: Feb 14</span>
+                            </div>
                         </div>
-                        <h3>Something went wrong</h3>
-                        <p id="errorMessage">Please try again or upload a different file.</p>
-                        <button class="retry-btn" onclick="resetApp()">
-                            Try Again
-                        </button>
                     </div>
                 </div>
             </section>
@@ -153,34 +133,96 @@
             <!-- Courses Section -->
             <section id="courses" class="section courses-section">
                 <div class="section-header">
-                    <h2>Course Management</h2>
-                    <p>Organize and track assignments in one place</p>
+                    <h2>Available Courses</h2>
+                    <p>Browse the courses currently available in our database</p>
+                </div>
+                <div class="available-courses">
+                    <div class="course-card" data-course="COMMST223">
+                        <div class="course-header">
+                            <h3>COMMST 223</h3>
+                            <span class="course-badge">Spring 2025</span>
+                        </div>
+                        <p>Public Speaking</p>
+                        <div class="course-stats">
+                            <span><i class="fas fa-calendar"></i> 8 Assignments</span>
+                            <span><i class="fas fa-clock"></i> Next: Feb 15</span>
+                        </div>
+                    </div>
+                    
+                    <div class="course-card" data-course="CS135">
+                        <div class="course-header">
+                            <h3>CS 135</h3>
+                            <span class="course-badge">Spring 2025</span>
+                        </div>
+                        <p>Designing Functional Programs</p>
+                        <div class="course-stats">
+                            <span><i class="fas fa-calendar"></i> 12 Assignments</span>
+                            <span><i class="fas fa-clock"></i> Next: Feb 10</span>
+                        </div>
+                    </div>
+                    
+                    <div class="course-card" data-course="MATH135">
+                        <div class="course-header">
+                            <h3>MATH 135</h3>
+                            <span class="course-badge">Spring 2025</span>
+                        </div>
+                        <p>Algebra for Honours Mathematics</p>
+                        <div class="course-stats">
+                            <span><i class="fas fa-calendar"></i> 10 Assignments</span>
+                            <span><i class="fas fa-clock"></i> Next: Feb 12</span>
+                        </div>
+                    </div>
+                    
+                    <div class="course-card" data-course="MATH137">
+                        <div class="course-header">
+                            <h3>MATH 137</h3>
+                            <span class="course-badge">Spring 2025</span>
+                        </div>
+                        <p>Calculus 1 for Honours Mathematics</p>
+                        <div class="course-stats">
+                            <span><i class="fas fa-calendar"></i> 9 Assignments</span>
+                            <span><i class="fas fa-clock"></i> Next: Feb 14</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- How To Section -->
+            <section id="howto" class="section howto-section">
+                <div class="section-header">
+                    <h2>How To Use UW Due Date</h2>
+                    <p>Learn how to get the most out of your academic assistant</p>
                 </div>
                 <div class="feature-grid">
                     <div class="feature-card">
                         <div class="feature-icon">
-                            <i class="fas fa-book"></i>
+                            <i class="fas fa-comments"></i>
                         </div>
-                        <h3>Multiple Syllabi</h3>
-                        <p>Upload and manage syllabi from multiple courses</p>
+                        <h3>Ask Questions</h3>
+                        <p>Click "Ask" to open the chat and ask about deadlines, assignments, or upcoming tasks</p>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon">
-                            <i class="fas fa-calendar-alt"></i>
+                            <i class="fas fa-search"></i>
                         </div>
-                        <h3>Unified Calendar</h3>
-                        <p>See all your assignments and deadlines in a single calendar view</p>
+                        <h3>Query by Course</h3>
+                        <p>Mention specific course codes like "CS 135" or "MATH 135" to get targeted information</p>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon">
-                            <i class="fas fa-bell"></i>
+                            <i class="fas fa-plus"></i>
                         </div>
-                        <h3>Smart Reminders</h3>
-                        <p>Get notified about upcoming deadlines before they sneak up on you</p>
+                        <h3>Request Courses</h3>
+                        <p>Use "Add Course" to request new courses be added to our database</p>
                     </div>
                 </div>
-                <div class="coming-soon">
-                    <p><i class="fas fa-clock"></i> These features are coming soon! Start by uploading a syllabus above.</p>
+                <div class="how-to-examples">
+                    <h4>Try asking:</h4>
+                    <ul>
+                        <li>"What assignments are due this week?"</li>
+                        <li>"When is the next CS 135 assignment due?"</li>
+                        <li>"Show me all MATH 135 deadlines"</li>
+                    </ul>
                 </div>
             </section>
 
@@ -206,6 +248,42 @@
                 for University of Waterloo students ❤️
             </p>
         </footer>
+    </div>
+
+    <!-- Chatbot Popup -->
+    <div id="chatbot" class="chatbot-overlay" style="display: none;">
+        <div class="chatbot-container">
+                <div class="chatbot-header">
+                    <h3>
+                        <img src="public/images/2DoLogo.png" alt="UW Due Date Logo" class="chatbot-logo">
+                        UW Due Date Assistant
+                    </h3>
+                <button id="closeChatBtn" class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="chatbot-messages" id="chatMessages">
+                <div class="message bot-message">
+                    <div class="message-avatar">
+                        <img src="public/images/2DoLogo.png" alt="UW Due Date Logo" class="avatar-logo">
+                    </div>
+                    <div class="message-content">
+                        <p>Hi! I'm your UW Due Date assistant. Ask me about deadlines, assignments, or upcoming tasks for your courses. Try asking:</p>
+                        <ul>
+                            <li>"What assignments are due this week?"</li>
+                            <li>"When is the next CS 135 assignment due?"</li>
+                            <li>"Show me all MATH 135 deadlines"</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chatInput" placeholder="Ask about your course deadlines..." />
+                <button id="sendBtn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
     </div>
 
     <script type="module" src="script.js"></script>
