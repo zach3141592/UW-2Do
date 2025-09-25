@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UW Due Date</title>
+    <title>UW 2DO</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -15,8 +15,8 @@
         <nav class="navbar">
             <div class="nav-content">
                 <div class="nav-brand">
-                    <img src="public/images/2DoLogo.png" alt="UW Due Date Logo" class="brand-logo">
-                    <span class="brand-text">UW Due Date</span>
+                    <img src="public/images/2DoLogo.png" alt="UW 2DO Logo" class="brand-logo">
+                    <span class="brand-text">UW 2DO</span>
                 </div>
                 <div class="nav-links">
                     <a href="#home" class="nav-link active">Home</a>
@@ -33,7 +33,7 @@
                 <div class="hero-layout">
                     <div class="hero-content">
                         <div class="hero-text">
-                            <h1>Stay on Top of Your Academic Deadlines</h1>
+                            <h1>Stay On Top Of Your<br><span id="dynamicText" class="dynamic-text">Deadlines</span></h1>
                             <p>Ask our AI assistant about your course deadlines and assignments. Built specifically for University of Waterloo students with preloaded course data.</p>
                             <div class="cta-buttons">
                                 <button class="primary-btn" id="openChatBtn">
@@ -74,60 +74,6 @@
                         </div>
                     </div>
                 </div>
-                
-                <div class="course-data-section">
-                    <h2>Available Course Data</h2>
-                    <p>Ask our AI assistant about deadlines and assignments for these courses:</p>
-                    <div class="available-courses">
-                        <div class="course-card" data-course="COMMST223">
-                            <div class="course-header">
-                                <h3>COMMST 223</h3>
-                                <span class="course-badge">Spring 2025</span>
-                            </div>
-                            <p>Public Speaking</p>
-                            <div class="course-stats">
-                                <span><i class="fas fa-calendar"></i> 8 Assignments</span>
-                                <span><i class="fas fa-clock"></i> Next: Feb 15</span>
-                            </div>
-                        </div>
-                        
-                        <div class="course-card" data-course="CS135">
-                            <div class="course-header">
-                                <h3>CS 135</h3>
-                                <span class="course-badge">Spring 2025</span>
-                            </div>
-                            <p>Designing Functional Programs</p>
-                            <div class="course-stats">
-                                <span><i class="fas fa-calendar"></i> 12 Assignments</span>
-                                <span><i class="fas fa-clock"></i> Next: Feb 10</span>
-                            </div>
-                        </div>
-                        
-                        <div class="course-card" data-course="MATH135">
-                            <div class="course-header">
-                                <h3>MATH 135</h3>
-                                <span class="course-badge">Spring 2025</span>
-                            </div>
-                            <p>Algebra for Honours Mathematics</p>
-                            <div class="course-stats">
-                                <span><i class="fas fa-calendar"></i> 10 Assignments</span>
-                                <span><i class="fas fa-clock"></i> Next: Feb 12</span>
-                            </div>
-                        </div>
-                        
-                        <div class="course-card" data-course="MATH137">
-                            <div class="course-header">
-                                <h3>MATH 137</h3>
-                                <span class="course-badge">Spring 2025</span>
-                            </div>
-                            <p>Calculus 1 for Honours Mathematics</p>
-                            <div class="course-stats">
-                                <span><i class="fas fa-calendar"></i> 9 Assignments</span>
-                                <span><i class="fas fa-clock"></i> Next: Feb 14</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </section>
 
             <!-- Courses Section -->
@@ -135,8 +81,14 @@
                 <div class="section-header">
                     <h2>Available Courses</h2>
                     <p>Browse the courses currently available in our database</p>
+                    <div class="course-search">
+                        <div class="search-container">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="courseSearch" placeholder="Search courses by code or name..." class="search-input">
+                        </div>
+                    </div>
                 </div>
-                <div class="available-courses">
+                <div class="available-courses" id="coursesContainer">
                     <div class="course-card" data-course="COMMST223">
                         <div class="course-header">
                             <h3>COMMST 223</h3>
@@ -173,7 +125,7 @@
                         </div>
                     </div>
                     
-                    <div class="course-card" data-course="MATH137">
+                    <div class="course-card" data-course="MATH137" style="display: none;">
                         <div class="course-header">
                             <h3>MATH 137</h3>
                             <span class="course-badge">Spring 2025</span>
@@ -185,12 +137,24 @@
                         </div>
                     </div>
                 </div>
+                
+                <div class="pagination-controls">
+                    <button id="prevBtn" class="pagination-btn" disabled>
+                        <i class="fas fa-chevron-left"></i>
+                        Previous
+                    </button>
+                    <span class="page-info" id="pageInfo">Page 1 of 2</span>
+                    <button id="nextBtn" class="pagination-btn">
+                        Next
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
             </section>
 
             <!-- How To Section -->
             <section id="howto" class="section howto-section">
                 <div class="section-header">
-                    <h2>How To Use UW Due Date</h2>
+                        <h2>How To Use UW 2DO</h2>
                     <p>Learn how to get the most out of your academic assistant</p>
                 </div>
                 <div class="feature-grid">
@@ -216,32 +180,24 @@
                         <p>Use "Add Course" to request new courses be added to our database</p>
                     </div>
                 </div>
-                <div class="how-to-examples">
-                    <h4>Try asking:</h4>
-                    <ul>
-                        <li>"What assignments are due this week?"</li>
-                        <li>"When is the next CS 135 assignment due?"</li>
-                        <li>"Show me all MATH 135 deadlines"</li>
-                    </ul>
-                </div>
             </section>
 
             <!-- About Section -->
             <section id="about" class="section about-section">
                 <div class="section-header">
-                    <h2>About UW Due Date</h2>
+                        <h2>About UW 2DO</h2>
                     <p>Helping University of Waterloo students stay organized and succeed academically</p>
                 </div>
                 <div class="about-content">
                     <div class="about-text">
-                        <p>We understand how overwhelming university can be with multiple courses, assignments, and deadlines. UW Due Date was created to help University of Waterloo students take control of their academic schedule by automatically extracting and organizing important dates from course syllabi. Simply upload your course syllabus and our AI-powered system will analyze the document to identify assignments, exams, and their due dates. We'll highlight the most urgent tasks and help you prioritize your work effectively. This tool was designed specifically with University of Waterloo students in mind, understanding the unique challenges of managing course loads and deadlines in a fast-paced academic environment.</p>
+                        <p>We understand how overwhelming university can be with multiple courses, assignments, and deadlines. UW 2DO was created to help University of Waterloo students take control of their academic schedule by automatically extracting and organizing important dates from course syllabi. Simply upload your course syllabus and our AI-powered system will analyze the document to identify assignments, exams, and their due dates. We'll highlight the most urgent tasks and help you prioritize your work effectively. This tool was designed specifically with University of Waterloo students in mind, understanding the unique challenges of managing course loads and deadlines in a fast-paced academic environment.</p>
                     </div>
                 </div>
             </section>
         </main>
 
         <footer class="footer">
-            <p>&copy; 2025 UW Due Date. Built by 
+            <p>&copy; 2025 UW 2DO. Built by 
                 <a href="https://www.linkedin.com/in/zacharyyu/" target="_blank" class="author-link">Zachary Yu</a>, 
                 <a href="https://www.linkedin.com/in/aaron-wang-5b0a6a298/" target="_blank" class="author-link">Aaron Wang</a>, and 
                 <a href="https://www.linkedin.com/in/calvinlee33/" target="_blank" class="author-link">Calvin Lee</a> 
@@ -255,8 +211,8 @@
         <div class="chatbot-container">
                 <div class="chatbot-header">
                     <h3>
-                        <img src="public/images/2DoLogo.png" alt="UW Due Date Logo" class="chatbot-logo">
-                        UW Due Date Assistant
+                        <img src="public/images/2DoLogo.png" alt="UW 2DO Logo" class="chatbot-logo">
+                        UW 2DO Assistant
                     </h3>
                 <button id="closeChatBtn" class="close-btn">
                     <i class="fas fa-times"></i>
@@ -265,10 +221,10 @@
             <div class="chatbot-messages" id="chatMessages">
                 <div class="message bot-message">
                     <div class="message-avatar">
-                        <img src="public/images/2DoLogo.png" alt="UW Due Date Logo" class="avatar-logo">
+                        <img src="public/images/2DoLogo.png" alt="UW 2DO Logo" class="avatar-logo">
                     </div>
                     <div class="message-content">
-                        <p>Hi! I'm your UW Due Date assistant. Ask me about deadlines, assignments, or upcoming tasks for your courses. Try asking:</p>
+                        <p>Hi! I'm your UW 2DO assistant. Ask me about deadlines, assignments, or upcoming tasks for your courses. Try asking:</p>
                         <ul>
                             <li>"What assignments are due this week?"</li>
                             <li>"When is the next CS 135 assignment due?"</li>

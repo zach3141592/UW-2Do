@@ -9,11 +9,25 @@ const chatbot = document.getElementById('chatbot');
 const chatMessages = document.getElementById('chatMessages');
 const chatInput = document.getElementById('chatInput');
 const sendBtn = document.getElementById('sendBtn');
+const courseSearch = document.getElementById('courseSearch');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const pageInfo = document.getElementById('pageInfo');
+const coursesContainer = document.getElementById('coursesContainer');
+
+// Pagination variables
+let currentPage = 1;
+let coursesPerPage = 3;
+let allCourses = [];
+let filteredCourses = [];
 
 // Initialize the app
 document.addEventListener('DOMContentLoaded', function() {
     setupNavigation();
     setupChatbot();
+    setupCourseSearch();
+    setupPagination();
+    setupDynamicText();
 });
 
 function setupChatbot() {
@@ -68,7 +82,7 @@ function addMessage(content, type) {
     
     const avatar = document.createElement('div');
     avatar.className = 'message-avatar';
-    avatar.innerHTML = type === 'user' ? '<i class="fas fa-user"></i>' : '<img src="public/images/2DoLogo.png" alt="UW Due Date Logo" class="avatar-logo">';
+    avatar.innerHTML = type === 'user' ? '<i class="fas fa-user"></i>' : '<img src="public/images/2DoLogo.png" alt="UW 2DO Logo" class="avatar-logo">';
     
     const messageContent = document.createElement('div');
     messageContent.className = 'message-content';
@@ -91,7 +105,7 @@ function showTypingIndicator() {
     typingDiv.className = 'message bot-message typing-message';
     typingDiv.innerHTML = `
         <div class="message-avatar">
-            <img src="public/images/2DoLogo.png" alt="UW Due Date Logo" class="avatar-logo">
+            <img src="public/images/2DoLogo.png" alt="UW 2DO Logo" class="avatar-logo">
         </div>
         <div class="message-content">
             <div class="typing-indicator">
@@ -204,7 +218,7 @@ function generateCourseResponse(analysis) {
 
 async function getAIResponse(message) {
     // Create a context-aware prompt
-    const prompt = `You are a helpful academic assistant for University of Waterloo students. 
+    const prompt = `You are a helpful academic assistant for University of Waterloo students using UW 2DO. 
     
 Available courses and their data:
 ${Object.entries(courseData).map(([code, course]) => 
@@ -305,6 +319,164 @@ function setupScrollSpy() {
     sections.forEach(section => {
         observer.observe(section);
     });
+}
+
+function setupCourseSearch() {
+    if (!courseSearch) return;
+    
+    courseSearch.addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase().trim();
+        
+        if (searchTerm === '') {
+            // Reset to all courses
+            filteredCourses = [...allCourses];
+        } else {
+            // Filter courses based on search term
+            filteredCourses = allCourses.filter(card => {
+                const courseCode = card.querySelector('h3').textContent.toLowerCase();
+                const courseName = card.querySelector('p').textContent.toLowerCase();
+                return courseCode.includes(searchTerm) || courseName.includes(searchTerm);
+            });
+        }
+        
+        currentPage = 1; // Reset to first page
+        displayCourses();
+        updatePagination();
+    });
+}
+
+function setupPagination() {
+    if (!coursesContainer) return;
+    
+    // Get all course cards initially
+    allCourses = Array.from(coursesContainer.querySelectorAll('.course-card'));
+    filteredCourses = [...allCourses];
+    
+    // Set up event listeners
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                displayCourses();
+                updatePagination();
+            }
+        });
+    }
+    
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            const totalPages = Math.ceil(filteredCourses.length / coursesPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                displayCourses();
+                updatePagination();
+            }
+        });
+    }
+    
+    // Initial display
+    displayCourses();
+    updatePagination();
+}
+
+function displayCourses() {
+    if (!coursesContainer) return;
+    
+    // Remove existing no results message
+    const existingMessage = coursesContainer.querySelector('.no-results');
+    if (existingMessage) {
+        existingMessage.remove();
+    }
+    
+    // Hide all courses first
+    allCourses.forEach(card => {
+        card.style.display = 'none';
+    });
+    
+    if (filteredCourses.length === 0) {
+        // Show no results message
+        const noResultsDiv = document.createElement('div');
+        noResultsDiv.className = 'no-results';
+        noResultsDiv.innerHTML = `
+            <div style="text-align: center; padding: 3rem; color: #6c757d;">
+                <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                <h3 style="margin-bottom: 0.5rem;">No courses found</h3>
+                <p>Try searching for a different course code or name.</p>
+            </div>
+        `;
+        coursesContainer.appendChild(noResultsDiv);
+        return;
+    }
+    
+    // Calculate which courses to show
+    const startIndex = (currentPage - 1) * coursesPerPage;
+    const endIndex = startIndex + coursesPerPage;
+    const coursesToShow = filteredCourses.slice(startIndex, endIndex);
+    
+    // Show only the courses for this page
+    coursesToShow.forEach(card => {
+        card.style.display = 'block';
+        card.style.animation = 'fadeIn 0.3s ease';
+    });
+}
+
+function updatePagination() {
+    const totalPages = Math.ceil(filteredCourses.length / coursesPerPage);
+    
+    if (pageInfo) {
+        if (filteredCourses.length === 0) {
+            pageInfo.textContent = 'No results';
+        } else {
+            pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+        }
+    }
+    
+    if (prevBtn) {
+        prevBtn.disabled = currentPage === 1;
+    }
+    
+    if (nextBtn) {
+        nextBtn.disabled = currentPage === totalPages || filteredCourses.length === 0;
+    }
+    
+    // Hide pagination if only one page or no results
+    const paginationControls = document.querySelector('.pagination-controls');
+    if (paginationControls) {
+        paginationControls.style.display = (totalPages <= 1) ? 'none' : 'flex';
+    }
+}
+
+function setupDynamicText() {
+    const dynamicTextElement = document.getElementById('dynamicText');
+    if (!dynamicTextElement) return;
+    
+    const words = ['Deadlines', 'Assignments', 'Syllabus', 'Lifestyle'];
+    let currentIndex = 0;
+    let isAnimating = false;
+    
+    function changeText() {
+        if (isAnimating) return;
+        isAnimating = true;
+        
+        // Fade out current text
+        dynamicTextElement.style.animation = 'fadeOut 0.6s cubic-bezier(0.4, 0, 0.6, 1) forwards';
+        
+        setTimeout(() => {
+            // Change to next word
+            currentIndex = (currentIndex + 1) % words.length;
+            dynamicTextElement.textContent = words[currentIndex];
+            
+            // Fade in new text
+            dynamicTextElement.style.animation = 'fadeIn 0.6s cubic-bezier(0.4, 0, 0.6, 1) forwards';
+            
+            setTimeout(() => {
+                isAnimating = false;
+            }, 600);
+        }, 300);
+    }
+    
+    // Change text every 4 seconds for smoother experience
+    setInterval(changeText, 4000);
 }
 
 function setupEventListeners() {

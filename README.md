@@ -1,4 +1,4 @@
-# UW 2Do
+# UW 2DO
 
 app to help waterloo students see what work they have to do in one place. pls star our repo :)
 
@@ -18,7 +18,7 @@ made in 90 mins by Zachary Yu, Aaron Wang, and Calvin Lee
 
 ```bash
 git clone <repository-url>
-cd UW-DueDate
+cd UW-2Do
 ```
 
 2. Install dependencies:
