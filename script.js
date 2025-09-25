@@ -67,7 +67,7 @@ function setupNavigation() {
         });
     });
     
-    // Set up scroll spy to update active nav link
+    // Set up scroll spy to update active nav link :)
     setupScrollSpy();
 }
 
