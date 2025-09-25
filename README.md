@@ -1,14 +1,4 @@
-# UW Due Date 🎓
-
-A modern web application that helps University of Waterloo students track assignment due dates by analyzing course syllabi using AI.
-
-## Features
-
-- 📋 **Smart Syllabus Analysis**: Upload PDF, Word, or text files and extract due dates automatically
-- 🤖 **AI-Powered**: Uses OpenAI GPT-4 to intelligently parse syllabus content
-- ⚡ **Urgent Task Detection**: Highlights tasks due within the next 7 days
-- 📱 **Responsive Design**: Works seamlessly on desktop and mobile devices
-- 🎨 **Modern UI**: Beautiful, intuitive interface with glassmorphism design
+# UW Due Date 
 
 ## Quick Start
 
