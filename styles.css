@@ -873,44 +873,6 @@ body {
     background: #f8f9fa;
 }
 
-/* How To Section */
-.howto-section {
-    background: #ffffff;
-}
-
-.feature-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-bottom: 3rem;
-}
-
-.feature-card {
-    background: transparent;
-    padding: 2rem;
-    border-radius: 0;
-    text-align: center;
-    box-shadow: none;
-    border: none;
-}
-
-.feature-icon {
-    font-size: 3rem;
-    color: #6c757d;
-    margin-bottom: 1.5rem;
-}
-
-.feature-card h3 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #212529;
-    margin-bottom: 1rem;
-}
-
-.feature-card p {
-    color: #6c757d;
-    line-height: 1.6;
-}
 
 .coming-soon {
     text-align: center;
@@ -1403,10 +1365,6 @@ body {
         font-size: 1.1rem;
     }
     
-    .feature-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
     
     .about-text {
         max-width: 100%;
