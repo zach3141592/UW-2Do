@@ -82,7 +82,7 @@ function addMessage(content, type) {
     
     const avatar = document.createElement('div');
     avatar.className = 'message-avatar';
-    avatar.innerHTML = type === 'user' ? '<i class="fas fa-user"></i>' : '<img src="public/images/2DoLogo.png" alt="UW 2DO Logo" class="avatar-logo">';
+    avatar.innerHTML = type === 'user' ? '<i class="fas fa-user"></i>' : '<img src="/images/2DoLogo.png" alt="UW 2DO Logo" class="avatar-logo">';
     
     const messageContent = document.createElement('div');
     messageContent.className = 'message-content';
@@ -105,7 +105,7 @@ function showTypingIndicator() {
     typingDiv.className = 'message bot-message typing-message';
     typingDiv.innerHTML = `
         <div class="message-avatar">
-            <img src="public/images/2DoLogo.png" alt="UW 2DO Logo" class="avatar-logo">
+            <img src="/images/2DoLogo.png" alt="UW 2DO Logo" class="avatar-logo">
         </div>
         <div class="message-content">
             <div class="typing-indicator">
