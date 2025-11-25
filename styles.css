@@ -601,9 +601,7 @@ body {
 
 .author-link:hover {
     color: #fff;
-    text-decoration: underline;
-    text-decoration-style: wavy;
-    text-decoration-color: #e74c3c;
+    text-decoration: none;
 }
 
 /* Chatbot Styles */
